@@ -324,24 +324,32 @@
     });
     paneEls[p.k].exp.addEventListener("click", function(e){ e.stopPropagation(); toggleExpand(p.k); });
     paneEls[p.k].body.addEventListener("scroll", function(){ onPaneScroll(p.k); }, {passive:true});
+    // Only the pane the user is actually touching/scrolling may drive the sync.
+    // This prevents the other panes' (programmatic) scroll events from feeding
+    // back — which on iOS caused the panes to keep creeping after lift-off.
+    ["touchstart","pointerdown","wheel","mousedown","keydown"].forEach(function(ev){
+      paneEls[p.k].body.addEventListener(ev, function(){ activeK = p.k; }, {passive:true});
+    });
   });
 
   // ----- synchronized scrolling (proportional; versions differ in length) -----
-  var syncLock = false;
-  function onPaneScroll(srcK){
-    if(syncLock || !state.syncScroll) return;
-    if(!state.visible[srcK]) return;
+  var activeK = null;
+  function syncFrom(srcK){
+    if(!state.syncScroll || !state.visible[srcK]) return;
     var src = paneEls[srcK].body;
     var denom = src.scrollHeight - src.clientHeight;
     var frac = denom > 0 ? src.scrollTop/denom : 0;
-    syncLock = true;
     PANES.forEach(function(p){
       if(p.k===srcK || !state.visible[p.k]) return;
       var b = paneEls[p.k].body;
       var d = b.scrollHeight - b.clientHeight;
       b.scrollTop = frac * d;
     });
-    requestAnimationFrame(function(){ syncLock = false; });
+  }
+  function onPaneScroll(srcK){
+    // ignore scroll events on panes that aren't the one being directly driven
+    if(srcK !== activeK) return;
+    syncFrom(srcK);
   }
 
   function speakerLabel(who){ return who? who : null; }
@@ -510,7 +518,7 @@
   function applySync(){ syncToggle.classList.toggle("on", state.syncScroll); }
   syncToggle.addEventListener("click", function(){
     state.syncScroll=!state.syncScroll; LS.set("syncScroll",state.syncScroll); applySync();
-    if(state.syncScroll) onPaneScroll(PANES.filter(function(p){return state.visible[p.k];})[0].k);
+    if(state.syncScroll) syncFrom(PANES.filter(function(p){return state.visible[p.k];})[0].k);
   });
 
   document.getElementById("gearBtn").addEventListener("click", function(e){

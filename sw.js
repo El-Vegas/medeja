@@ -1,5 +1,5 @@
 /* Medea ·3 — network-first for HTML, cache-first for static assets; offline-capable. */
-const CACHE = "medea3-v4";
+const CACHE = "medea3-v5";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest",
   "./favicon.ico", "./favicon-32.png", "./apple-touch-icon-180.png",

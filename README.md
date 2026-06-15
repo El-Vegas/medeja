@@ -11,14 +11,11 @@ and all three jump to it; tap a pane's title bar to expand it for focused readin
 again to share the view three ways. On wide screens (tablet / desktop / landscape) the
 panes become three side-by-side columns automatically.
 
-## Why scene-by-scene (not line-by-line)
+## How the three line up
 
-The two English translations render Đurković's central device differently. In the
-original — and in your translation — **Medea's lines are spoken without her name**, her
-voice running unattributed through the others' speech (set off here by a faint margin
-rule). Paula Gordon instead **labels them MEDEA**. Because of this the versions don't
-align word-for-word, so they're kept in step by **scene**, the one structure all three
-share.
+All three follow the same speeches in the same order, so they can be read across
+line by line; they are kept in step by **scene**. The wordings differ because they
+are independent translations of the same source text.
 
 ## Features
 
